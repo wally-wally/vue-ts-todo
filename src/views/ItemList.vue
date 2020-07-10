@@ -11,28 +11,50 @@
 <script lang="ts">
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import Item from '@/components/Item.vue';
+import {mapGetters} from 'vuex';
 
 @Component({
   components: {
     Item,
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'allTodoList',
+      'activeTodoList',
+      'clearTodoList',
+    ]),
+  },
 })
 export default class ItemList extends Vue {
-  data: any[] = [
-    {id: 0, title: 'test1', status: 'active'},
-    {id: 1, title: 'test2', status: 'active'},
-    {id: 2, title: 'test3', status: 'clear'},
-  ];
+  renderList: any[] = [];
+  // mapGetters 관련 lint error를 없애기 위한 단순 선언 부분
+  // 추후 vuex-class 라이브러리로 구현해보자.
+  allTodoList!: any[];
+  activeTodoList!: any[];
+  clearTodoList!: any[];
 
-  renderList: any[] = this.data;
+  created() {
+    this.$store.dispatch('initData');
+  }
+
+  initRenderList(status: string) {
+    if (!status) {
+      this.renderList = this.allTodoList;
+    } else if (status === 'active') {
+      this.renderList = this.activeTodoList;
+    } else if (status === 'clear') {
+      this.renderList = this.clearTodoList;
+    }
+  }
 
   @Watch('$route.params.status')
-  routeUpdate(newValue: string) {
-    if (!newValue) {
-      this.renderList = this.data;
-    } else if (newValue === 'active' || newValue === 'clear') {
-      this.renderList = this.data.filter((item: any) => item.status === newValue);
-    }
+  routeUpdate(newValue: 'active' | 'clear') {
+    this.initRenderList(newValue);
+  }
+  @Watch('$store.state.todoList', {deep: true})
+  statusUpdate() {
+    const status: string = this.$route.params.status;
+    this.initRenderList(status);
   }
 }
 </script>

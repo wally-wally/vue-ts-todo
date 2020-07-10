@@ -15,7 +15,7 @@ import ItemInput from '@/components/ItemInput.vue';
   components: {
     Header,
     ItemInput,
-  }
+  },
 })
 export default class App extends Vue {
 
