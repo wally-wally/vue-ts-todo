@@ -32,7 +32,3 @@ export default class Item extends Vue {
   }
 }
 </script>
-
-<style>
-
-</style>

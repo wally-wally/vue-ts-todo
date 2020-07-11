@@ -13,11 +13,23 @@
 import {Vue, Component} from 'vue-property-decorator';
 
 @Component
-export default class Header extends Vue {
-
-}
+export default class Header extends Vue {}
 </script>
 
-<style>
+<style scoped>
+h1 {
+  font-weight: 600;
+  text-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  animation: flicker 1s linear alternate infinite;
+}
 
+@keyframes flicker {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 </style>

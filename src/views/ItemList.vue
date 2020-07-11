@@ -11,27 +11,19 @@
 <script lang="ts">
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import Item from '@/components/Item.vue';
-import {mapGetters} from 'vuex';
+import {Getter} from 'vuex-class';
 
 @Component({
   components: {
     Item,
   },
-  computed: {
-    ...mapGetters([
-      'allTodoList',
-      'activeTodoList',
-      'clearTodoList',
-    ]),
-  },
 })
 export default class ItemList extends Vue {
+  @Getter allTodoList!: any[];
+  @Getter activeTodoList!: any[];
+  @Getter clearTodoList!: any[];
+
   renderList: any[] = [];
-  // mapGetters 관련 lint error를 없애기 위한 단순 선언 부분
-  // 추후 vuex-class 라이브러리로 구현해보자.
-  allTodoList!: any[];
-  activeTodoList!: any[];
-  clearTodoList!: any[];
 
   created() {
     this.$store.dispatch('initData');
@@ -58,7 +50,3 @@ export default class ItemList extends Vue {
   }
 }
 </script>
-
-<style>
-
-</style>

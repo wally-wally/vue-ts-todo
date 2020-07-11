@@ -10,20 +10,18 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
-import {mapState} from 'vuex';
+import {State} from 'vuex-class';
 
-@Component({
-  computed: {
-    ...mapState([
-      'todoList',
-    ]),
-  },
-})
+@Component
 export default class ItemInput extends Vue {
+  @State todoList!: any[];
   title: string = '';
-  todoList!: any[];
 
   addItem() {
+    if (!this.title) {
+      alert('1자 이상 할 일을 입력해주세요.');
+      return;
+    }
     this.$store.commit('addItem', {
       id: this.todoList[this.todoList.length - 1].id + 1,
       title: this.title,
@@ -33,7 +31,3 @@ export default class ItemInput extends Vue {
   }
 }
 </script>
-
-<style>
-
-</style>
